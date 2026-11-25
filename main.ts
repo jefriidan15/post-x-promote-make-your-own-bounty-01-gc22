@@ -49,10 +49,16 @@ if (typeof parsed.url !== "string" || !POST_URL_RE.test(parsed.url)) {
   );
 }
 
+// POST_URL_RE already validated the shape, so this match cannot fail.
+const [, handle, statusId] = parsed.url.match(
+  /^https:\/\/x\.com\/([A-Za-z0-9_]+)\/status\/(\d+)$/
+);
+
 mkdirSync(OUTPUT_DIR, { recursive: true });
 const destPath = join(OUTPUT_DIR, "POST.json");
 writeFileSync(destPath, raw);
 
 console.log(`main.ts: copied ${sourcePath} -> ${destPath}`);
 console.log(`main.ts: post url: ${parsed.url}`);
+console.log(`main.ts: post by @${handle}, status ${statusId}`);
 console.log(`main.ts: ${raw.length} bytes, byte-identical copy`);
